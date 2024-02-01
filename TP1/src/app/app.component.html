@@ -1,13 +1,13 @@
 <div class="container-xxl">
   <header class="row align-items-center">
     <div class="col-1 mx-0 px-0"><img class="img-fluid" src="../assets/images/note.png" alt="Music note"></div>
-    <div class="col"><h1>Requêtes musicales</h1></div>
+    <div class="col"><h1>TP1</h1></div>
   </header>
   <div class="row">
     <div class="col-3">
-      <form (ngSubmit)="searchArtist()" *ngIf="!result">
-        <input type="text" name="artistName" class="form-control" placeholder="Nom d'un artiste">
-        <input type="submit" value="Rechercher l'artiste" class="btn btn-light">
+      <form *ngIf="!result">
+        <input type="text" name="artistName" class="form-control" placeholder="Nom d'un artiste" [(ngModel)]="artist">
+        <input (click)="request()" type="submit" value="Rechercher l'artiste" class="btn btn-light">
       </form>
       <form (ngSubmit)="newSearch()" *ngIf="result">
         <input type="submit" value="Nouvelle recherche">
@@ -15,9 +15,18 @@
     </div>
     <div class="col artists">
         <h2>Résultats</h2>
-        <div *ngIf="result">
-		  <!-- L'affichage des artistes similaires sera ici 😩 -->
-		</div>
+        <div *ngIf="result" >
+          <div *ngFor="let a of albums" class="row">
+            
+            <div class="col-3">
+              <img (click)="requestSongs(a.name)" src="{{a.imageUrl}}">
+            </div>
+            <div class="col-3">
+               {{a.name}} 
+            </div>
+            
+          </div>
+		    </div>
     </div>
   </div>
 </div>
