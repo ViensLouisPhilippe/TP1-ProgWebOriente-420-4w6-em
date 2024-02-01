@@ -11,22 +11,22 @@ import { album } from './models/album';
 })
 export class AppComponent {
   
+
   albums : album[] = [];
+  afficher : string = "";
   result : boolean = false;
   artist : string = "";
+  chansons : string[] = [];
 
   constructor(public http : HttpClient){}
 
   async request() : Promise<void>{
     this.result = true;
 
-    //get top album
-    //https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=cher&api_key=9a8a3facebbccaf363bb9fd68fa37abf&format=json
     
     let albumGet = await lastValueFrom(this.http.get<any>("https://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist="+ this.artist+"&api_key=9a8a3facebbccaf363bb9fd68fa37abf&format=json"));
     console.log(albumGet);
 
-    this.albums = [];
     // ...
     for(let x of albumGet.topalbums.album){
       this.albums.push(new album(x.name, x.image[2]["#text"]))
@@ -34,14 +34,22 @@ export class AppComponent {
     console.log(this.albums);
   }
   async requestSongs(albumSelect : string) : Promise<void>{
-    //get info
-    //https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9a8a3facebbccaf363bb9fd68fa37abf&artist=Cher&album=Believe&format=json
+  
+    this.afficher = albumSelect;
     let ChansonsGet = await lastValueFrom(this.http.get<any>("https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9a8a3facebbccaf363bb9fd68fa37abf&artist="+ this.artist+"&album="+ albumSelect+"&format=json"));
     console.log(ChansonsGet);
+    // ...
+    for(let x of ChansonsGet.album.tracks.track){
+      this.chansons.push(x.name)
+    }
+    console.log(this.chansons);
   }
 
 
   newSearch():void{
     this.result = false;
+    this.albums = [];
+    this.chansons = [];
+
   }
 }
