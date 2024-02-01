@@ -34,6 +34,7 @@ export class AppComponent {
     console.log(this.albums);
   }
   async requestSongs(albumSelect : string) : Promise<void>{
+    this.chansons = [];
   
     this.afficher = albumSelect;
     let ChansonsGet = await lastValueFrom(this.http.get<any>("https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=9a8a3facebbccaf363bb9fd68fa37abf&artist="+ this.artist+"&album="+ albumSelect+"&format=json"));
@@ -49,7 +50,6 @@ export class AppComponent {
   newSearch():void{
     this.result = false;
     this.albums = [];
-    this.chansons = [];
 
   }
 }
